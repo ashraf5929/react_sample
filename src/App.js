@@ -1,12 +1,25 @@
+import logo from './logo.svg';
 import './App.css';
-import React,{useState}from 'react'
+import ItemForm from './pages/itemForm/itemForm';
+import ListItems from './pages/listItems/listItems';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Header from './components/header/header';
+
+
 function App() {
-  const [data,setData]=useState("Anil")
   return (
-    <div className="App">
-      <h1>Hooks in React {data}</h1>
-      <button onClick={()=>setData("Peter")}>Update State</button>
-    </div>
+    <>
+      <Router>
+        <Header/>
+        <Routes>
+          <Route path="/" Component={ItemForm} />
+
+          <Route path="/list" Component={ListItems} />
+        </Routes>
+      </Router>
+
+
+    </>
   );
 }
 
