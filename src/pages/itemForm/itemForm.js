@@ -14,16 +14,14 @@ const ItemForm = () => {
         console.log(data); // This will contain the form data.
     };
 
-    const [initialValues, setInitialValues] = useState({
-        username: "hello"
-    })
+    const [initialValues, setInitialValues] = useState({ })
 
     return (
         <>
             <Container>
-                <h1 className={classes.title}> Form</h1>
+                <h1 className={classes.formTitle}> Form</h1>
                 <Box>
-                    <form
+                    <form className={classes.formContainer}
                         onSubmit={handleSubmit(onSubmit)}>
                         <InputController
                             control={control}
