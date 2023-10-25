@@ -3,30 +3,46 @@ import { TableRow, TableCell, Box } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useStyles } from './styles';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { useMutation } from 'react-query';
+import { deleteTableRecord } from '../../services/apiService';
+import { useNavigate } from 'react-router-dom';
 
-const TableRecord = ({ data }) => {
+
+
+const TableRecord = ({ data, refresh }) => {
     const classes = useStyles();
+    const navigate = useNavigate();
+    const deleteMutation = useMutation(deleteTableRecord, {
+        onSuccess: () => {
+            refresh();
+        }
+    });
 
     const deleteRecord = () => {
-        console.log('delete', data.id);
-    }
+        deleteMutation.mutate(data.id);
+    };
+
+    const editRecord = () => {
+       navigate(`/?data=${JSON.stringify(data)}`);
+
+    };
 
     return (
-            <TableRow key={data.id}>
-                <TableCell>{data.id}</TableCell>
-                <TableCell>{data.responseNumber}</TableCell>
-                <TableCell>{data.responseDate}</TableCell>
-                <TableCell>{data.type}</TableCell>
-                <TableCell>{data.forType}</TableCell>
-                <TableCell>{data.description}</TableCell>
-                <TableCell>
-                    <Box className={classes.actionCell}>
-                        <ModeEditIcon className={[classes.actionIcon, classes.editIcon]} />
-                        <DeleteOutlineIcon onClick={() => console.log('id', data.id)} className={[classes.actionIcon, classes.deleteIcon]} />
-                    </Box>
-                </TableCell>
-            </TableRow>
-    )
+        <TableRow key={data.id}>
+            <TableCell>{data.id}</TableCell>
+            <TableCell>{data.resourceId}</TableCell>
+            <TableCell>{data.responseDate}</TableCell>
+            <TableCell>{data.type}</TableCell>
+            <TableCell>{data.forType}</TableCell>
+            <TableCell>{data.description}</TableCell>
+            <TableCell>
+                <Box className={classes.actionCell}>
+                    <ModeEditIcon onClick={editRecord} className={[classes.actionIcon, classes.editIcon]} />
+                    <DeleteOutlineIcon onClick={deleteRecord} className={[classes.actionIcon, classes.deleteIcon]} />
+                </Box>
+            </TableCell>
+        </TableRow>
+    );
 }
 
 export default TableRecord;

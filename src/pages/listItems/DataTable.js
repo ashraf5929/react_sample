@@ -16,7 +16,7 @@ const columns = [
 ];
 
 
-const DataTable = ({ data }) => {
+const DataTable = ({ data, refresh }) => {
 
   const classes = useStyles();
 
@@ -32,7 +32,7 @@ const DataTable = ({ data }) => {
         </TableHead>
         <TableBody>
           {data && data.map((row) => (
-            <TableRecord key={row.id} data={row}/>
+            <TableRecord key={row.id} data={row} refresh={refresh}/>
           ))}
         </TableBody>
       </Table>
