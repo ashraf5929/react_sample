@@ -3,17 +3,20 @@ import React, { useState, useEffect } from "react";
 import InputController from "../../components/inputs/input-controller";
 import { useStyles } from "./styles";
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
+import { useLocation } from 'react-router-dom';
 import { submitNewRecord } from '../../services/apiService';
+import { useMutation } from "react-query";
 
 
 const ItemForm = () => {
     const classes = useStyles();
     const { handleSubmit, control, setValue } = useForm();
-    const location = useLocation(); // Use useLocation to access the location object
+    const location = useLocation();
 
-    const onSubmit = async (data) => {
-         await submitNewRecord(data);
+    const createMutation = useMutation(submitNewRecord);
+
+    const onSubmit = (data) => {
+        createMutation.mutate(data);
     };
 
     useEffect(() => {
@@ -23,7 +26,6 @@ const ItemForm = () => {
         if (dataString) {
             try {
                 const dataObject = JSON.parse(dataString);
-                // Set the form fields with the received data
                 setValue("description", dataObject.description);
                 setValue("resourceId", dataObject.resourceId);
                 setValue("type", dataObject.type);
