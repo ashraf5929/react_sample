@@ -3,20 +3,8 @@ import axios from 'axios';
 const BASE_URL = 'https://asg-05559-d-01-request.azuremicroservices.io/v1';
 
 export const submitNewRecord = async (formData) => {
-  console.log(formData);
   try {
-    const result = await axios.post(`${BASE_URL}/requests`, {
-      "id": 0,
-      "resourceId": Number(formData.resourceId),
-      "type": formData.type,
-      "forType": formData.forType,
-      "parentId": 0,
-      "children": [
-        0
-      ],
-      "description": formData.description,
-      "status": formData.status
-    });
+    const result = await axios.post(`${BASE_URL}/requests`, formData);
     return result;
   } catch (error) {
     console.log('error', error);
@@ -30,4 +18,14 @@ export const getData = async () => {
 
 export const deleteTableRecord = async (id) => {
   return await axios.delete(`${BASE_URL}/requests?id=${id}`)
+}
+
+export const updateRecord = async (formData) => {
+  try {
+    console.log('dataaaaa', formData)
+    const result = await axios.put(`${BASE_URL}/requests`, formData);
+    return result;
+  } catch (error) {
+    console.log('error', error);
+  }
 }

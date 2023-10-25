@@ -4,20 +4,39 @@ import InputController from "../../components/inputs/input-controller";
 import { useStyles } from "./styles";
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { submitNewRecord } from '../../services/apiService';
+import { submitNewRecord, updateRecord } from '../../services/apiService';
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 
 const ItemForm = () => {
+    const navigate = useNavigate();
     const classes = useStyles();
     const { handleSubmit, control, setValue } = useForm();
     const location = useLocation();
+    const [id, setId] = React.useState(null);
 
-    const createMutation = useMutation(submitNewRecord);
+    const createMutation = useMutation(submitNewRecord, {
+        onSuccess: () => {
+            navigate('/list')
+        }
+    });
+    const updateMutation = useMutation(updateRecord, {
+        onSuccess: () => {
+            navigate('/list')
+        }
+    });
 
     const onSubmit = (data) => {
+        data.id = 0;
         createMutation.mutate(data);
     };
+
+    const onEditSubmit = (data) => {
+        data.responseDate = new Date();
+        data.id = id;
+        updateMutation.mutate(data);
+    }
 
     useEffect(() => {
         const query = new URLSearchParams(location.search);
@@ -26,6 +45,7 @@ const ItemForm = () => {
         if (dataString) {
             try {
                 const dataObject = JSON.parse(dataString);
+                setId(dataObject.id);
                 setValue("description", dataObject.description);
                 setValue("resourceId", dataObject.resourceId);
                 setValue("type", dataObject.type);
@@ -44,7 +64,7 @@ const ItemForm = () => {
                 <Box>
                     <form
                         className={classes.formContainer}
-                        onSubmit={handleSubmit(onSubmit)}
+                        onSubmit={handleSubmit(id ? onEditSubmit : onSubmit)}
                     >
                         <InputController
                             control={control}

@@ -6,25 +6,33 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useMutation } from 'react-query';
 import { deleteTableRecord } from '../../services/apiService';
 import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+import LoadingIcon from '../icons/loadingIcon';
 
 
 
 const TableRecord = ({ data, refresh }) => {
     const classes = useStyles();
     const navigate = useNavigate();
+    const [isDeleting, setIsDeleting] = React.useState(false);
     const deleteMutation = useMutation(deleteTableRecord, {
         onSuccess: () => {
             refresh();
+        },
+        onError: () => {
+            setIsDeleting(false);
         }
     });
 
     const deleteRecord = () => {
-        deleteMutation.mutate(data.id);
+        setIsDeleting(true);
+        setTimeout(() => {
+            deleteMutation.mutate(data.id);
+        }, 500);
     };
 
     const editRecord = () => {
-       navigate(`/?data=${JSON.stringify(data)}`);
-
+        navigate(`/?data=${JSON.stringify(data)}`);
     };
 
     return (
@@ -38,7 +46,10 @@ const TableRecord = ({ data, refresh }) => {
             <TableCell>
                 <Box className={classes.actionCell}>
                     <ModeEditIcon onClick={editRecord} className={[classes.actionIcon, classes.editIcon]} />
-                    <DeleteOutlineIcon onClick={deleteRecord} className={[classes.actionIcon, classes.deleteIcon]} />
+                    {isDeleting ? (<LoadingIcon />) : (
+                        (<DeleteOutlineIcon onClick={deleteRecord} className={[classes.actionIcon, classes.deleteIcon]} />)
+                    )}
+
                 </Box>
             </TableCell>
         </TableRow>
