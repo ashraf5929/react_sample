@@ -22,7 +22,6 @@ export const deleteTableRecord = async (id) => {
 
 export const updateRecord = async (formData) => {
   try {
-    console.log('dataaaaa', formData)
     const result = await axios.put(`${BASE_URL}/requests`, formData);
     return result;
   } catch (error) {

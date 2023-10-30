@@ -73,9 +73,7 @@ const TableRecord = ({ data, refresh }) => {
                         {isDeleting ? (<LoadingIcon />) : (
                             (<DeleteOutlineIcon onClick={deleteRecord} className={[classes.actionIcon, classes.deleteIcon]} />)
                         )}
-                        <Button onClick={() => {
-                            handleOpenSnackbar("hhhhhhhh", 'red')
-                        }}>click</Button>
+
 
                     </Box>
                 </TableCell>
