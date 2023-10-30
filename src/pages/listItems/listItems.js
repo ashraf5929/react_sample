@@ -6,14 +6,13 @@ import { getData } from '../../services/apiService';
 import { useQuery, useQueryClient } from 'react-query';
 
 const ListItems = () => {
-  const queryClient = useQueryClient(); // hook to interact with the query cache
+  const queryClient = useQueryClient();
 
   const { data: items, isLoading, isError } = useQuery('records', getData);
 
   const classes = useStyles();
 
   const refresh = () => {
-    // Invalidate and refetch the query
     queryClient.invalidateQueries('records');
   };
 
